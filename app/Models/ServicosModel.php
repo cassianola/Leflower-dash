@@ -17,6 +17,13 @@ class ServicosModel extends Model
         'duracaoServico',
         'descricaoServico',
         'valorServico',
+        'idFuncionario' // Adicione esta linha se ainda não estiver presente
     ];
 
+    public function funcionario()
+    {
+        return $this->belongsTo(Funcionario::class, 'idFuncionario', 'idFuncionario');
+    }
 }
+
+

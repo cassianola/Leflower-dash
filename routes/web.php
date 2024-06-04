@@ -91,9 +91,18 @@ Route::middleware(['autenticacao:cliente'])->group(function(){
 
 });
 
-
 Route::middleware(['autenticacao:Administrador'])->group(function(){
     Route::get('/admin',[AdminController::class,'index'])->name('dashboard.funcionarios.admin');
+    Route::get('dash/admin/func', [AdminController::class, 'indexFunc'])->name('dashboard.admin.func.index');
+
+    Route::get('dash/admin/servico', [AdminController::class, 'indexFuncServico'])->name('dashboard.admin.func.servico');
+
+
+    Route::get('dash/admin/cliente', [AdminController::class, 'indexFuncCliente'])->name('dashboard.admin.func.cliente');
+    
+
+    Route::get('dash/admin/func/criar', [AdminController::class, 'createFunc'])->name('dashboard.admin.func.create');
+    Route::post('dash/admin/func/cadastrar', [AdminController::class, 'cadFunc'])->name('dashboard.admin.func.cad');
 });
 
 

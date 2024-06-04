@@ -9,7 +9,7 @@ use App\Models\Usuario;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
-
+ 
 class CadastroController extends Controller
 {
     public function index(){

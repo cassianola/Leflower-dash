@@ -4,4 +4,6 @@
 
 <h4>Olá, {{ $func->nomeFuncionario }}</h4>
 
+
+
 @endsection

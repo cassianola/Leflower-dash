@@ -255,7 +255,7 @@
         </div>
 
 
-        <!--  Body ADMINISTRADOR -->
+        <!--  Body ADMINISTRADOR *********************************************************************************************************** -->
     @elseif(session('nivelFuncionario') == 'Administrador')
         <title>Administrador - Le Flower</title>
 
@@ -266,21 +266,23 @@
                 <!-- Sidebar scroll-->
                 <div>
                     <div class="brand-logo d-flex align-items-center justify-content-between flex-direction"
-                        style="flex-direction: column; min-height: 120px;  padding: 10px 24px;"
-                        style="flex-direction: column; min-height: 105px;">
-                        <a href="./index.html" class="text-nowrap logo-img">
-                            <img src="{{ asset('dash/images/logos/logo2.png') }}" width="80" alt="" />
-                        </a>
-                        <h2 style="color: #fff; font-size: 1.50rem; text-align: center; text-transform: capitalize; ">
-                            Administrador (a) <br> {{ $func->nomeFuncionario }}</h2>
-                        <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-                            <i class="ti ti-x fs-8"></i>
-
-                        </div>
-                        <style>
-                            . .v {}
-                        </style>
+                    style="flex-direction: column; min-height: 120px;  padding: 10px 24px;"
+                    style="flex-direction: column; min-height: 105px;">
+                    <a href="./index.html" class="text-nowrap logo-img">
+                        <img src="{{ asset('dash/images/logos/logo2.png') }}" width="80" alt="" />
+                    </a>
+                    <h2 style="color: #fff; font-size: 1.50rem; text-align: center; text-transform: capitalize; ">
+                        Administrador<br>
+                        @if(isset($func))
+                            {{ $func->nomeFuncionario }}
+                        @else
+                            Nome não disponível
+                        @endif
+                    </h2>
+                    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                        <i class="ti ti-x fs-8"></i>
                     </div>
+                </div>
 
                     <!-- Sidebar navigation-->
                     <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
@@ -310,7 +312,7 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.cliente') }}">
                                     <span>
                                         <i class="ti ti-alert-circle"></i>
                                     </span>
@@ -318,7 +320,8 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.index') }}"
+                                    aria-expanded="false">
                                     <span>
                                         <i class="ti ti-cards"></i>
                                     </span>
@@ -326,19 +329,19 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
+                                <a class="sidebar-link" href="">
                                     <span>
                                         <i class="ti ti-file-description"></i>
                                     </span>
-                                    <span class="hide-menu">Serviços</span>
+                                    <span class="hide-menu">Horarios</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.servico') }}">
                                     <span>
                                         <i class="ti ti-typography"></i>
                                     </span>
-                                    <span class="hide-menu">Horários</span>
+                                    <span class="hide-menu">Serviços</span>
                                 </a>
                             </li>
                             <li class="nav-small-cap">
@@ -347,22 +350,16 @@
                             </li>
 
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="#" aria-expanded="false"
-                                    onclick="toggleSubMenu(event)">
+
+
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.create') }}">
                                     <span>
                                         <i class="ti ti-user-plus"></i>
                                     </span>
                                     <span class="hide-menu">Cadastrar Funcionários</span>
-                                    <span class="arrow"></span>
+                                    {{-- <span class="arrow"></span> --}}
                                 </a>
-                                <ul class="submenu">
-                                    <li><a class="menusub" style="justify-content: end" href="#">Opção 1</a>
-                                    </li>
-                                    <li><a class="menusub" style="justify-content: end" href="#">Opção 2</a>
-                                    </li>
-                                    <li><a class="menusub" style="justify-content: end" href="#">Opção 3</a>
-                                    </li>
-                                </ul>
+
                             </li>
 
                             <li class="sidebar-item">
@@ -394,16 +391,16 @@
             <!--  Main wrapper -->
             <div class="body-wrapper">
                 <!--  Header Start -->
-                <header class="app-header">
+                {{-- <header class="app-header">
                     <nav class="navbar navbar-expand-lg navbar-light">
-                        <ul class="navbar-nav">
-                            <li class="nav-item d-block d-xl-none">
+                        <ul class="navbar-nav"> --}}
+                            {{-- <li class="nav-item d-block d-xl-none">
                                 <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse"
                                     href="javascript:void(0)">
                                     <i class="ti ti-menu-2"></i>
                                 </a>
-                            </li>
-                            <li class="nav-item">
+                            </li> --}}
+                            {{-- <li class="nav-item">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)">
                                     <i class="ti ti-bell-ringing"></i>
                                     <div class="notification bg-primary rounded-circle"></div>
@@ -444,12 +441,12 @@
                             </ul>
                         </div>
                     </nav>
-                </header>
+                </header> --}}
                 <!--  Header End -->
                 <div class="container-fluid">
                     {{-- Conteudo do Dashboard vem aqui!! --}}
 
-
+                    @yield('dash-func')
                 </div>
             </div>
             {{-- </div>  --}}
@@ -613,7 +610,7 @@
                     <!--  Header End -->
                     <div class="container-fluid">
                         {{-- Conteudo do Dashboard vem aqui!! --}}
-                        @yield('dashboard')
+                        @yield('dash')
 
                     </div>
                 </div>
