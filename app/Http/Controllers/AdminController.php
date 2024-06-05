@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 
+// perfil do admin/atualizar
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+
+
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -57,6 +62,87 @@ class AdminController extends Controller
     }
 
 
+     // Exibir perfil do admin
+     public function perfilFunc()
+    {
+        Log::info('Perfil do admin acessado');
+        $idFuncionario = session('id');
+        if (!$idFuncionario) {
+            Log::error('ID do funcionário não encontrado na sessão');
+            return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
+        }
+        Log::info('ID do Funcionario: ' . $idFuncionario);
+
+        $func = Funcionario::find($idFuncionario);
+
+        if (!$func) {
+            Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
+            return redirect()->back()->with('error', 'Funcionário não encontrado.');
+        }
+
+        return view('site.dashboard.admin.func.perfil', compact('func'));
+    }
+
+    public function updateFunc(Request $request)
+    {
+        Log::info('Update profile request received', ['request' => $request->all()]);
+
+        $idFuncionario = session('id');
+        if (!$idFuncionario) {
+            Log::error('ID do funcionário não encontrado na sessão');
+            return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
+        }
+        Log::info('ID do Funcionario: ' . $idFuncionario);
+
+        $func = Funcionario::find($idFuncionario);
+
+        if (!$func) {
+            Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
+            return redirect()->back()->with('error', 'Funcionário não encontrado.');
+        }
+
+        $validatedData = $request->validate([
+            'nomeFuncionario' => 'required|string|max:255',
+            'dataNascFuncionario' => 'required|date',
+            'emailFuncionario' => 'required|string|email|max:255',
+            'telefoneFuncionario' => 'required|string|max:15',
+            'enderecoFuncionario' => 'required|string|max:255',
+            'senhaFuncionario' => 'nullable|string|confirmed|min:8',
+            'salarioFuncionario' => 'required|numeric',
+            'nivelFuncionario' => 'required|string|max:255',
+            'statusFuncionario' => 'required|string|max:255',
+            'cargoFuncionario' => 'required|string|max:255',
+            'idEspecialidade' => 'required|integer',
+        ]);
+
+        Log::info('Validation passed', ['validatedData' => $validatedData]);
+
+        $func->nomeFuncionario = $validatedData['nomeFuncionario'];
+        $func->dataNascFuncionario = $validatedData['dataNascFuncionario'];
+        $func->emailFuncionario = $validatedData['emailFuncionario'];
+        $func->telefoneFuncionario = $validatedData['telefoneFuncionario'];
+        $func->enderecoFuncionario = $validatedData['enderecoFuncionario'];
+        $func->salarioFuncionario = $validatedData['salarioFuncionario'];
+        $func->nivelFuncionario = $validatedData['nivelFuncionario'];
+        $func->statusFuncionario = $validatedData['statusFuncionario'];
+        $func->cargoFuncionario = $validatedData['cargoFuncionario'];
+        $func->idEspecialidade = $validatedData['idEspecialidade'];
+
+        if (!empty($validatedData['senhaFuncionario'])) {
+            Log::info('Password field is filled');
+            $func->senhaFuncionario = Hash::make($validatedData['senhaFuncionario']);
+            Log::info('Senha criptografada: ' . $func->senhaFuncionario);
+        } else {
+            Log::info('Password field is not filled');
+        }
+
+        $func->save();
+
+        Log::info('Profile updated successfully for ID: ' . $idFuncionario);
+
+        return redirect()->route('dashboard.admin.func.perfil')->with('success', 'Perfil atualizado com sucesso!');
+    }
+
 
 
 
@@ -77,68 +163,66 @@ class AdminController extends Controller
         return view('site.dashboard.admin.func.create', compact('func'));
     }
 
-  // CADASTRAR FUNCIONARIO NOVO
-  public function cadFunc(Request $request)
-  {
-      // Validação dos campos
-      $request->validate([
-          'nomeFuncionario' => 'required|string|max:100',
-          'emailFuncionario' => 'required|string|max:100',
-          'senhaFuncionario' => 'required|string|max:20', // Corrigido para string
-          'telefoneFuncionario' => 'required|string|max:20',
-          'salarioFuncionario' => 'required|numeric', // Corrigido para numeric
-          'enderecoFuncionario' => 'required|string|max:100',
-          'nivelFuncionario' => 'required|string|max:100',
-          'cargoFuncionario' => 'required|string|max:30',
-          'statusFuncionario' => 'required|string|max:20',
-          'dataNascFuncionario' => 'required|date', // Adicionado
-          'idEspecialidade' => 'required|integer', // Adicionado
-          'created_at' => 'nullable|date',
-          'updated_at' => 'nullable|date',
-      ]);
+    // CADASTRAR FUNCIONARIO NOVO
+    public function cadFunc(Request $request)
+    {
+        // Validação dos campos
+        $request->validate([
+            'nomeFuncionario' => 'required|string|max:100',
+            'emailFuncionario' => 'required|string|max:100',
+            'senhaFuncionario' => 'required|string|max:20', // Corrigido para string
+            'telefoneFuncionario' => 'required|string|max:20',
+            'salarioFuncionario' => 'required|numeric', // Corrigido para numeric
+            'enderecoFuncionario' => 'required|string|max:100',
+            'nivelFuncionario' => 'required|string|max:100',
+            'cargoFuncionario' => 'required|string|max:30',
+            'statusFuncionario' => 'required|string|max:20',
+            'dataNascFuncionario' => 'required|date', // Adicionado
+            'idEspecialidade' => 'required|integer', // Adicionado
+            'created_at' => 'nullable|date',
+            'updated_at' => 'nullable|date',
+        ]);
 
-      $func = new Funcionario();
-    //   $user = new Usuario();
-      // $user = new Usuario();
+        $func = new Funcionario();
+        //   $user = new Usuario();
+        // $user = new Usuario();
 
-      $func->nomeFuncionario = $request->input('nomeFuncionario');
-      $func->emailFuncionario = $request->input('emailFuncionario');
-      $func->senhaFuncionario = $request->input('senhaFuncionario');
-      $func->telefoneFuncionario = $request->input('telefoneFuncionario');
-      $func->salarioFuncionario = $request->input('salarioFuncionario');
-      $func->enderecoFuncionario = $request->input('enderecoFuncionario');
-      $func->nivelFuncionario = $request->input('nivelFuncionario');
-      $func->cargoFuncionario = $request->input('cargoFuncionario');
-      $func->statusFuncionario = $request->input('statusFuncionario');
-      $func->dataNascFuncionario = $request->input('dataNascFuncionario'); // Adicionado
-      $func->idEspecialidade = $request->input('idEspecialidade'); // Adicionado
-      $func->created_at = $request->input('created_at');
-      $func->updated_at = $request->input('updated_at');
-
-
-      // $user->nomeUsuario = $request->input('nomeUsuario'); // Adicionado
-      // $user->senhaUsuario = $request->input('senhaUsuario'); // Adicionado
-      // $user->tipoUsuario = $request->input('tipoUsuario');
-      // $user->emailUsuario = $request->input('emailUsuario');
-      // $user->created_at = $request->input('created_at');
-      // $user->updated_at = $request->input('updated_at');
-      // $user->statusUsuario = $request->input('statusUsuario');
+        $func->nomeFuncionario = $request->input('nomeFuncionario');
+        $func->emailFuncionario = $request->input('emailFuncionario');
+        $func->senhaFuncionario = $request->input('senhaFuncionario');
+        $func->telefoneFuncionario = $request->input('telefoneFuncionario');
+        $func->salarioFuncionario = $request->input('salarioFuncionario');
+        $func->enderecoFuncionario = $request->input('enderecoFuncionario');
+        $func->nivelFuncionario = $request->input('nivelFuncionario');
+        $func->cargoFuncionario = $request->input('cargoFuncionario');
+        $func->statusFuncionario = $request->input('statusFuncionario');
+        $func->dataNascFuncionario = $request->input('dataNascFuncionario'); // Adicionado
+        $func->idEspecialidade = $request->input('idEspecialidade'); // Adicionado
+        $func->created_at = $request->input('created_at');
+        $func->updated_at = $request->input('updated_at');
 
 
-
-      $func->save();
-
-      // $funcUserId = $func->idFuncionario;
-
-      // $user->tipoUsuario = 'funcionario';
-      // $user->tipoUsuario_id = $funcUserId;
-      // $user->tipoUsuario_type = 'funcionario';
-
-      // $user->save();
+        // $user->nomeUsuario = $request->input('nomeUsuario'); // Adicionado
+        // $user->senhaUsuario = $request->input('senhaUsuario'); // Adicionado
+        // $user->tipoUsuario = $request->input('tipoUsuario');
+        // $user->emailUsuario = $request->input('emailUsuario');
+        // $user->created_at = $request->input('created_at');
+        // $user->updated_at = $request->input('updated_at');
+        // $user->statusUsuario = $request->input('statusUsuario');
 
 
-      return redirect()->route('dashboard.admin.func.index')->with('sucess', 'Funcionario cadrastado com sucesso');
-  }
+
+        $func->save();
+
+        // $funcUserId = $func->idFuncionario;
+
+        // $user->tipoUsuario = 'funcionario';
+        // $user->tipoUsuario_id = $funcUserId;
+        // $user->tipoUsuario_type = 'funcionario';
+
+        // $user->save();
+
+
+        return redirect()->route('dashboard.admin.func.index')->with('sucess', 'Funcionario cadrastado com sucesso');
+    }
 }
-
-
