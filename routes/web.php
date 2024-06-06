@@ -105,6 +105,10 @@ Route::middleware(['autenticacao:Administrador'])->group(function(){
     Route::post('dash/admin/func/cadastrar', [AdminController::class, 'cadFunc'])->name('dashboard.admin.func.cad');
 
 
+    Route::get('dash/admin/func/criar', [AdminController::class, 'createServico'])->name('dashboard.admin.func.createServico');
+    Route::post('dash/admin/func/cadastrar', [AdminController::class, 'cadServico'])->name('dashboard.admin.func.cad');
+
+
     // editar/atualizar
     Route::get('dash/admin/perfil', [AdminController::class, 'perfilFunc'])->name('dashboard.admin.func.perfil');
     Route::post('dash/admin/update', [AdminController::class, 'updateFunc'])->name('dashboard.admin.func.update');
