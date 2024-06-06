@@ -62,86 +62,103 @@ class AdminController extends Controller
     }
 
 
+
+
+
+
      // Exibir perfil do admin
+
      public function perfilFunc()
-    {
-        Log::info('Perfil do admin acessado');
-        $idFuncionario = session('id');
-        if (!$idFuncionario) {
-            Log::error('ID do funcionário não encontrado na sessão');
-            return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
-        }
-        Log::info('ID do Funcionario: ' . $idFuncionario);
+     {
+         Log::info('Perfil do admin acessado');
+         $idFuncionario = session('id');
+         Log::info('ID do Funcionario da Sessão: ' . $idFuncionario);
 
-        $func = Funcionario::find($idFuncionario);
+         if (!$idFuncionario) {
+             Log::error('ID do funcionário não encontrado na sessão');
+             return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
+         }
 
-        if (!$func) {
-            Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
-            return redirect()->back()->with('error', 'Funcionário não encontrado.');
-        }
+         $func = Funcionario::find($idFuncionario);
 
-        return view('site.dashboard.admin.func.perfil', compact('func'));
-    }
+         if (!$func) {
+             Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
+             return redirect()->back()->with('error', 'Funcionário não encontrado.');
+         }
 
-    public function updateFunc(Request $request)
-    {
-        Log::info('Update profile request received', ['request' => $request->all()]);
+         return view('site.dashboard.admin.func.perfil', compact('func'));
+     }
 
-        $idFuncionario = session('id');
-        if (!$idFuncionario) {
-            Log::error('ID do funcionário não encontrado na sessão');
-            return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
-        }
-        Log::info('ID do Funcionario: ' . $idFuncionario);
+     public function updateFunc(Request $request)
+     {
+         Log::info('Update profile request received', ['request' => $request->all()]);
 
-        $func = Funcionario::find($idFuncionario);
+         $idFuncionario = session('id');
+         Log::info('ID do Funcionario da Sessão: ' . $idFuncionario);
 
-        if (!$func) {
-            Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
-            return redirect()->back()->with('error', 'Funcionário não encontrado.');
-        }
+         if (!$idFuncionario) {
+             Log::error('ID do funcionário não encontrado na sessão');
+             return redirect()->back()->with('error', 'ID do funcionário não encontrado na sessão.');
+         }
 
-        $validatedData = $request->validate([
-            'nomeFuncionario' => 'required|string|max:255',
-            'dataNascFuncionario' => 'required|date',
-            'emailFuncionario' => 'required|string|email|max:255',
-            'telefoneFuncionario' => 'required|string|max:15',
-            'enderecoFuncionario' => 'required|string|max:255',
-            'senhaFuncionario' => 'nullable|string|confirmed|min:8',
-            'salarioFuncionario' => 'required|numeric',
-            'nivelFuncionario' => 'required|string|max:255',
-            'statusFuncionario' => 'required|string|max:255',
-            'cargoFuncionario' => 'required|string|max:255',
-            'idEspecialidade' => 'required|integer',
-        ]);
+         $func = Funcionario::find($idFuncionario);
 
-        Log::info('Validation passed', ['validatedData' => $validatedData]);
+         if (!$func) {
+             Log::error('Funcionário não encontrado com ID: ' . $idFuncionario);
+             return redirect()->back()->with('error', 'Funcionário não encontrado.');
+         }
 
-        $func->nomeFuncionario = $validatedData['nomeFuncionario'];
-        $func->dataNascFuncionario = $validatedData['dataNascFuncionario'];
-        $func->emailFuncionario = $validatedData['emailFuncionario'];
-        $func->telefoneFuncionario = $validatedData['telefoneFuncionario'];
-        $func->enderecoFuncionario = $validatedData['enderecoFuncionario'];
-        $func->salarioFuncionario = $validatedData['salarioFuncionario'];
-        $func->nivelFuncionario = $validatedData['nivelFuncionario'];
-        $func->statusFuncionario = $validatedData['statusFuncionario'];
-        $func->cargoFuncionario = $validatedData['cargoFuncionario'];
-        $func->idEspecialidade = $validatedData['idEspecialidade'];
+         Log::info('Funcionário encontrado', ['funcionario' => $func]);
 
-        if (!empty($validatedData['senhaFuncionario'])) {
-            Log::info('Password field is filled');
-            $func->senhaFuncionario = Hash::make($validatedData['senhaFuncionario']);
-            Log::info('Senha criptografada: ' . $func->senhaFuncionario);
-        } else {
-            Log::info('Password field is not filled');
-        }
+         try {
+             $validatedData = $request->validate([
+                 'nomeFuncionario' => 'required|string|max:255',
+                 'dataNascFuncionario' => 'required|date',
+                 'emailFuncionario' => 'required|string|email|max:255',
+                 'telefoneFuncionario' => 'required|string|max:15',
+                 'enderecoFuncionario' => 'required|string|max:255',
+                 'senhaFuncionario' => 'nullable|string|confirmed|min:2',
+                 'salarioFuncionario' => 'required|numeric',
+                 'nivelFuncionario' => 'required|string|max:255',
+                 'statusFuncionario' => 'required|string|max:255',
+                 'cargoFuncionario' => 'required|string|max:255',
+                 'idEspecialidade' => 'required|integer',
+             ]);
 
-        $func->save();
+             Log::info('Validation passed', ['validatedData' => $validatedData]);
 
-        Log::info('Profile updated successfully for ID: ' . $idFuncionario);
+             $func->nomeFuncionario = $validatedData['nomeFuncionario'];
+             $func->dataNascFuncionario = $validatedData['dataNascFuncionario'];
+             $func->emailFuncionario = $validatedData['emailFuncionario'];
+             $func->telefoneFuncionario = $validatedData['telefoneFuncionario'];
+             $func->enderecoFuncionario = $validatedData['enderecoFuncionario'];
+             $func->salarioFuncionario = $validatedData['salarioFuncionario'];
+             $func->nivelFuncionario = $validatedData['nivelFuncionario'];
+             $func->statusFuncionario = $validatedData['statusFuncionario'];
+             $func->cargoFuncionario = $validatedData['cargoFuncionario'];
+             $func->idEspecialidade = $validatedData['idEspecialidade'];
 
-        return redirect()->route('dashboard.admin.func.perfil')->with('success', 'Perfil atualizado com sucesso!');
-    }
+             if (!empty($validatedData['senhaFuncionario'])) {
+                 Log::info('Password field is filled');
+                 $func->senhaFuncionario = Hash::make($validatedData['senhaFuncionario']);
+                 Log::info('Senha criptografada: ' . $func->senhaFuncionario);
+             } else {
+                 Log::info('Password field is not filled');
+             }
+
+             Log::info('Saving updated data to database');
+             $func->save();
+
+             Log::info('Profile updated successfully for ID: ' . $idFuncionario);
+
+             return redirect()->route('dashboard.admin.func.perfil')->with('success', 'Perfil atualizado com sucesso!');
+         } catch (\Exception $e) {
+             Log::error('Error updating profile', ['error' => $e->getMessage()]);
+             return redirect()->back()->with('error', 'Erro ao atualizar perfil.');
+         }
+     }
+
+
 
 
 

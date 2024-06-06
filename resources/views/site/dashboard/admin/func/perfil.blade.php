@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            <label for="senhaFuncionario">Senha</label>
+            <label for="senhaFuncionario">Senha (mínimo 8 caracteres)</label>
             <input type="password" name="senhaFuncionario" id="senhaFuncionario" class="form-control">
         </div>
 
