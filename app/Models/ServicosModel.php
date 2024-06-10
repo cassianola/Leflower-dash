@@ -20,6 +20,10 @@ class ServicosModel extends Model
         'idFuncionario' // Adicione esta linha se ainda não estiver presente
     ];
 
+      const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+
+
     public function funcionario()
     {
         return $this->belongsTo(Funcionario::class, 'idFuncionario', 'idFuncionario');

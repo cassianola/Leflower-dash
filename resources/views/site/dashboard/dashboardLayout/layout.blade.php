@@ -337,7 +337,7 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.servico') }}">
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.servico.servico') }}">
                                     <span>
                                         <i class="ti ti-typography"></i>
                                     </span>
@@ -372,7 +372,7 @@
                             </li>
 
                             <li class="sidebar-item">
-                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.createServico') }}" aria-expanded="false">
+                                <a class="sidebar-link" href="{{ route('dashboard.admin.func.servico.createServico') }}" aria-expanded="false">
                                     <span>
                                         <i class="ti ti-user-plus"></i>
                                     </span>

@@ -95,7 +95,7 @@ Route::middleware(['autenticacao:Administrador'])->group(function(){
     Route::get('/admin',[AdminController::class,'index'])->name('dashboard.funcionarios.admin');
     Route::get('dash/admin/func', [AdminController::class, 'indexFunc'])->name('dashboard.admin.func.index');
 
-    Route::get('dash/admin/servico', [AdminController::class, 'indexFuncServico'])->name('dashboard.admin.func.servico');
+    Route::get('dash/admin/servico', [AdminController::class, 'indexFuncServico'])->name('dashboard.admin.func.servico.servic');
 
 
     Route::get('dash/admin/cliente', [AdminController::class, 'indexFuncCliente'])->name('dashboard.admin.func.cliente');
@@ -105,8 +105,8 @@ Route::middleware(['autenticacao:Administrador'])->group(function(){
     Route::post('dash/admin/func/cadastrar', [AdminController::class, 'cadFunc'])->name('dashboard.admin.func.cad');
 
 
-    Route::get('dash/admin/func/criar', [AdminController::class, 'createServico'])->name('dashboard.admin.func.createServico');
-    Route::post('dash/admin/func/cadastrar', [AdminController::class, 'cadServico'])->name('dashboard.admin.func.cad');
+    Route::get('dash/admin/servico/criar', [AdminController::class, 'createServico'])->name('dashboard.admin.func.servico.createServico');
+    Route::post('dash/admin/servico/cadastrar', [AdminController::class, 'cadServico'])->name('dashboard.admin.func.servico.cad');
 
 
     // editar/atualizar

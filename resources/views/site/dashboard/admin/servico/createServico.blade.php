@@ -1,7 +1,7 @@
+<!-- resources/views/site/dashboard/admin/servico/createServico.blade.php -->
 @extends('site.dashboard.dashboardLayout.layout')
 
 @section('dash-func')
-{{-- <title>Cadastro de Funcionário</title> --}}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,44 +52,28 @@
     </style>
 
     <!-- Parte do formulário -->
-    <form action="{{ route('dashboard.admin.func.cad') }}" method="POST">
+    <form action="{{ route('dashboard.admin.func.servico.cad') }}" method="POST">
         @csrf
         <div>
             <label for="tipoServico">Tipo de Serviço:</label>
-            <input type="text" id="tipoServico" name="tipoServico" required maxlength="40">
-            @error ('tipoServico')
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
+            <input type="text" id="tipoServico" name="tipoServico" required>
         </div>
         <div>
             <label for="nomeServico">Nome do Serviço:</label>
-            <input type="text" id="nomeServico" name="nomeServico" maxlength="50">
-            @error ('nomeServico')
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
+            <input type="text" id="nomeServico" name="nomeServico">
         </div>
         <div>
-            <label for="duracaoServico">Duração do Serviço:</label>
+            <label for="duracaoServico">Duração do Serviço (hh:mm):</label>
             <input type="time" id="duracaoServico" name="duracaoServico" required>
-            @error ('duracaoServico')
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
         </div>
         <div>
             <label for="descricaoServico">Descrição do Serviço:</label>
             <textarea id="descricaoServico" name="descricaoServico"></textarea>
-            @error ('descricaoServico')
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
         </div>
         <div>
             <label for="valorServico">Valor do Serviço:</label>
-            <input type="text" id="valorServico" name="valorServico" required maxlength="40">
-            @error ('valorServico')
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
+            <input type="text" id="valorServico" name="valorServico" required>
         </div>
-        <button type="submit">Cadastrar</button>
+        <button type="submit">Salvar</button>
     </form>
-
 @endsection

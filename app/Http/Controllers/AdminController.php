@@ -47,7 +47,7 @@ class AdminController extends Controller
     {
         $servicos = DB::table('tblservicos')->get(); // Buscar todos os serviços
 
-        return view('site.dashboard.admin.servico.servico', compact('servicos'));
+        return view('site.dashboard.admin.func.servico.servico', compact('servico'));
 
         // return view('site.dashboard.admin.func.servico', compact('func', 'servicos'));
     }
@@ -89,6 +89,7 @@ class AdminController extends Controller
 
         return view('site.dashboard.admin.func.perfil', compact('func'));
     }
+
 
     public function updateFunc(Request $request)
     {
@@ -244,40 +245,51 @@ class AdminController extends Controller
         return redirect()->route('dashboard.admin.func.index')->with('sucess', 'Funcionario cadrastado com sucesso');
     }
 
-    public function createServico()
-    {
-        // Verifica se o usuário está autenticado
-        $servicos = session('id');
 
-        // Busca o funcionário no banco de dados
-        $servico = ServicosModel::find($servicos);
 
-        // Se o funcionário não for encontrado, retorna erro 404
-        if (!$servico) {
-            abort(404, 'Funcionario nao encontrado');
-        }
 
-        // Retorna a view com os dados do funcionário
-        return view('site.dashboard.admin.func.createServico', compact('func'));
+
+
+
+
+
+// criar servico
+
+public function createServico()
+{
+    // Verifica se o usuário está autenticado
+    $servicos = session('id');
+
+    // Busca o serviço no banco de dados
+    $servico = ServicosModel::find($servicos);
+
+    // Se o serviço não for encontrado, retorna erro 404
+    if (!$servico) {
+        abort(404, 'Servico nao encontrado');
     }
 
-    // CADASTRAR FUNCIONARIO NOVO
+    // Retorna a view com os dados do serviço
+    return view('site.dashboard.admin.func.servico.createServico', compact('servicos'));
+}
+
+
     public function cadServico(Request $request)
     {
         // Validação dos campos
         $request->validate([
             'tipoServico' => 'required|string|max:40',
             'nomeServico' => 'nullable|string|max:50',
-            'duracaoServico' => 'required|date_format:H:i:s',
+            'duracaoServico' => 'required|string|max:5', // Ajustado para string e limite de caracteres
             'descricaoServico' => 'nullable|string',
             'valorServico' => 'required|string|max:40',
             'created_at' => 'nullable|date',
             'updated_at' => 'nullable|date',
+
         ]);
 
+
+
         $servico = new ServicosModel();
-        //   $user = new Usuario();
-        // $user = new Usuario();
 
         $servico->tipoServico = $request->input('tipoServico');
         $servico->nomeServico = $request->input('nomeServico');
@@ -288,27 +300,8 @@ class AdminController extends Controller
         $servico->updated_at = $request->input('updated_at');
 
 
-        // $user->nomeUsuario = $request->input('nomeUsuario'); // Adicionado
-        // $user->senhaUsuario = $request->input('senhaUsuario'); // Adicionado
-        // $user->tipoUsuario = $request->input('tipoUsuario');
-        // $user->emailUsuario = $request->input('emailUsuario');
-        // $user->created_at = $request->input('created_at');
-        // $user->updated_at = $request->input('updated_at');
-        // $user->statusUsuario = $request->input('statusUsuario');
-
-
-
         $servico->save();
 
-        // $funcUserId = $func->idFuncionario;
-
-        // $user->tipoUsuario = 'funcionario';
-        // $user->tipoUsuario_id = $funcUserId;
-        // $user->tipoUsuario_type = 'funcionario';
-
-        // $user->save();
-
-
-        return redirect()->route('dashboard.admin.func.index')->with('sucess', 'Funcionario cadrastado com sucesso');
+        return redirect()->route('dashboard.admin.func.servico.servico')->with('success', 'Servico cadastrado com sucesso');
     }
 }
